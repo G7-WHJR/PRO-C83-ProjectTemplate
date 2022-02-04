@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  
 } from "react-native";
 import { Avatar, ListItem, Icon } from "react-native-elements";
 import firebase from "firebase";
@@ -15,6 +16,7 @@ export default class RideHistoryScreen extends Component {
     super(props);
     this.state = {
       allTransactions: [],
+      lastVisibleTransaction: null,
       searchText: ""
     };
   }
@@ -24,13 +26,12 @@ export default class RideHistoryScreen extends Component {
 
   getTransactions = () => {
     db.collection("transactions")
-      /*.limit(10)*/
       .get()
       .then(snapshot => {
         snapshot.docs.map(doc => {
           this.setState({
             allTransactions: [...this.state.allTransactions, doc.data()],
-            /*lastVisibleTransaction: doc*/
+            lastVisibleTransaction: doc
           });
         });
       });
@@ -52,29 +53,12 @@ export default class RideHistoryScreen extends Component {
         snapshot.docs.map(doc => {
           this.setState({
             allTransactions: [...this.state.allTransactions, doc.data()],
-            /*lastVisibleTransaction: doc*/
+            lastVisibleTransaction: doc
           });
         });
       });
   };
 
-  /*fetchMoreTransactions = async bikeId => {
-    bikeId = bikeId.toUpperCase().trim();
-
-    const { lastVisibleTransaction, allTransactions } = this.state;
-    const query = await db
-      .collection("transactions")
-      .where("bike_id", "==", bikeId)
-      .startAfter(lastVisibleTransaction)
-      .limit(10)
-      .get();
-    query.docs.map(doc => {
-      this.setState({
-        allTransactions: [...this.state.allTransactions, doc.data()],
-        lastVisibleTransaction: doc
-      });
-    });
-  };*/
 
   renderItem = ({ item, i }) => {
     var date = item.date
@@ -153,15 +137,15 @@ export default class RideHistoryScreen extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        {/*<View style={styles.lowerContainer}>
+        <View style={styles.lowerContainer}>
           <FlatList
-            data={allTransactions}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            onEndReached={() => this.fetchMoreTransactions(searchText)}
-            onEndReachedThreshold={0.7}
+            data={} /*allTransactions */
+            renderItem={} /*this.renderItem*/
+            keyExtractor={
+              (item, index) => index.toString()
+            }
           />
-    </View>*/}
+        </View>
       </View>
     );
   }
